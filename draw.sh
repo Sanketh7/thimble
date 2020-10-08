@@ -1,0 +1,1 @@
+dot -Tpng ast.dot -o ast.png

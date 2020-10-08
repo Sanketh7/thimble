@@ -1,0 +1,2 @@
+let myvar: int;
+myvar = 69+420*myvar;
