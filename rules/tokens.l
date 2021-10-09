@@ -1,7 +1,9 @@
 %option noyywrap
+%option nounput
+%option noinput
 %{
-#include <stdio.h>
-#include "parse.tab.h"
+#include <string>
+#include "parser.hpp"
 %}
 
 digit   [0-9]
@@ -16,13 +18,13 @@ letter  [a-zA-Z]
 "fn"        { return FN; }
 "let"       { return LET; }
 
-{letter}({letter}|{digit})*     { yylval.strval = strdup(yytext); return ID; }
-{digit}+                        { yylval.ival = atoi(yytext); return ICONST; }
+{letter}({letter}|{digit})*     { yylval.strVal = new std::string(yytext); return ID; }
+{digit}+                        { yylval.intVal = atoi(yytext); return ICONST; }
 
 "+"     { return PLUS; }
-"-"     { return DASH; }
-"*"     { return STAR; }
-"/"     { return FSLASH; }
+"-"     { return MINUS; }
+"*"     { return MULT; }
+"/"     { return DIV; }
 "="     { return EQUAL; }
 "("     { return LPAREN; }
 ")"     { return RPAREN; }
