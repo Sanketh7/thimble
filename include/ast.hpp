@@ -16,9 +16,10 @@ namespace thimble {
 
   class BinOp : public Expression {
   public:
-    std::unique_ptr<Expression> left, right;
+    std::unique_ptr<Expression> left;
     Operator op;
-    BinOp(std::unique_ptr<Expression> left, Operator op, std::unique_ptr<Expression> right) 
+    std::unique_ptr<Expression> right;
+    BinOp(std::unique_ptr<Expression> &left, Operator op, std::unique_ptr<Expression> &right) 
       : left(std::move(left)), op(op), right(std::move(right)) {} // note that std::move() moves ownership
   };
 
@@ -26,13 +27,13 @@ namespace thimble {
   public:
     Operator op;
     std::unique_ptr<Expression> expr;
-    UnOp(Operator op, std::unique_ptr<Expression> expr) : op(op), expr(std::move(expr)) {}
+    UnOp(Operator op, std::unique_ptr<Expression> &expr) : op(op), expr(std::move(expr)) {}
   };
 
   class Var : public Expression {
   public:
     std::string id;
-    Var(std::string& id) : id(id) {}
+    Var(std::string &id) : id(id) {}
   };
 
   class Integer : public Expression {
@@ -49,7 +50,7 @@ namespace thimble {
   public:
     std::unique_ptr<Var> var;
     DataType dataType;  
-    VarDecl(std::unique_ptr<Var> var, DataType dataType)
+    VarDecl(std::unique_ptr<Var> &var, DataType dataType)
       : var(std::move(var)), dataType(dataType) {}
   };
 
@@ -57,15 +58,15 @@ namespace thimble {
   public:
     std::unique_ptr<Var> var;
     std::unique_ptr<Expression> expr;
-    VarAssign(std::unique_ptr<Var>& var, std::unique_ptr<Expression>& expr)
+    VarAssign(std::unique_ptr<Var> &var, std::unique_ptr<Expression> &expr)
     : var(std::move(var)), expr(std::move(expr)) {}
   };
 
   class StatementList : public Statement {
   public:
-    std::vector<std::unique_ptr<Statement>> statements;
+    std::vector<std::unique_ptr<Statement> > statements;
     StatementList() {}
-    void addStatement(std::unique_ptr<Statement>& stmt) {
+    void addStatement(std::unique_ptr<Statement> stmt) {
       statements.push_back(std::move(stmt));
     }
   };

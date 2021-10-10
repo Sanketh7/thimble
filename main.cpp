@@ -1,12 +1,15 @@
 #include <iostream>
+#include <fstream>
 #include "include/ast.hpp"
-
-extern StatementList* program;
-extern int yyparse(FILE* fp);
+#include "include/lexer.hpp"
+using namespace thimble;
 
 int main() {
-  FILE* fp = fopen("../test.txt", "a");
-  yyparse(fp);
-  std::cout << program->statements.size() << std::endl;
+  std::ifstream fin("test.txt", std::ifstream::in);
+  Lexer l(fin);
+  Token tok;
+  do {
+    tok = l.get_next_token();
+  } while (tok.type != T_EOF);
   return 0;
 }
