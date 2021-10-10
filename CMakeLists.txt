@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.18.2)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 project(thimble)
 
-include(CTest)
-enable_testing()
+add_subdirectory(googletest)
+include_directories(googletest/googletest/include)
 
 add_executable(
   thimble 
@@ -14,11 +14,13 @@ add_executable(
   src/lexer.cpp
 )
 
-add_subdirectory(googletest)
-add_subdirectory(example)
+add_executable(
+  tests
 
-target_link_libraries(example PUBLIC example_lib gtest gtest_main gmock gmock_main)
+  src/lexer.cpp
+  tests/tests.cpp
 
-include(GoogleTest) # To use gtest_discover_tests
+  tests/lexer.cpp
+)
 
-gtest_discover_tests(example) # Runs GTest with CTest
+target_link_libraries(tests PRIVATE gtest)

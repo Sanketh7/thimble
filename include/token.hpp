@@ -47,6 +47,13 @@ namespace thimble {
     Token(TokenType type) : type(type) {}
     Token(TokenType type, int val) : type(type), int_val(val) {}
     Token(TokenType type, std::string& val) : type(type), str_val(val) {}
+    Token(TokenType type, const char *val) : type(type), str_val(val) {}
+
+    friend bool operator==(const Token& a, const Token& b) {
+      if (a.type == T_INT) return a.type == b.type && a.int_val == b.int_val;
+      if (a.type == T_ID) return a.type == b.type && a.str_val == b.str_val;
+      return a.type == b.type;
+    }
   };
 };
 
