@@ -1,5 +1,4 @@
-#ifndef __AST_HPP__
-#define __AST_HPP__
+#pragma once
 
 #include <vector>
 #include <string>
@@ -71,6 +70,3 @@ namespace thimble {
     }
   };
 }
-
-
-#endif

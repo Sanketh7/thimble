@@ -1,5 +1,4 @@
-#ifndef __OPERATOR_HPP__
-#define __OPERATOR_HPP__
+#pragma once
 
 enum Operator {
   OP_ADD,
@@ -7,5 +6,3 @@ enum Operator {
   OP_MULT,
   OP_DIV
 };
-
-#endif

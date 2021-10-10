@@ -1,5 +1,4 @@
-#ifndef __DATATYPE_HPP__
-#define __DATATYPE_HPP__
+#pragma once
 
 namespace thimble {
   enum DataType {
@@ -7,5 +6,3 @@ namespace thimble {
     DT_INT
   };
 }
-
-#endif

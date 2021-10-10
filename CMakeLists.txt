@@ -12,14 +12,16 @@ add_executable(
   thimble 
   main.cpp 
   src/lexer.cpp
+  src/parser.cpp
 )
 
 add_executable(
   tests
 
   src/lexer.cpp
-  tests/tests.cpp
+  src/parser.cpp
 
+  tests/tests.cpp
   tests/lexer.cpp
 )
 

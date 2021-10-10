@@ -1,5 +1,4 @@
-#ifndef __TOKEN_HPP__
-#define __TOKEN_HPP__
+#pragma once
 
 #include <string>
 
@@ -56,5 +55,3 @@ namespace thimble {
     }
   };
 };
-
-#endif
