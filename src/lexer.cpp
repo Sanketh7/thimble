@@ -13,7 +13,7 @@ namespace thimble {
 
     // '\0' means EOF
     if (!curr_char)
-      return Token(T_EOF);
+      return Token(T_EOF, buffer.line_no, buffer.pos);
 
     // identifiers are [a-z]([a-z0-9])*
     if (isalpha(curr_char)) {
@@ -26,21 +26,25 @@ namespace thimble {
     }
 
     // single character tokens
+    TokenType type = (TokenType)0;
     switch (curr_char) {
-      case '+': return Token(T_PLUS); break;
-      case '-': return Token(T_MINUS); break;
-      case '*': return Token(T_STAR); break;
-      case '/': return Token(T_SLASH); break;
-      case '=': return Token(T_EQUAL); break;
-      case '(': return Token(T_LPAREN); break;
-      case ')': return Token(T_RPAREN); break;
-      case '[': return Token(T_LBRACKET); break;
-      case ']': return Token(T_RBRACKET); break;
-      case '{': return Token(T_LBRACE); break;
-      case '}': return Token(T_RBRACE); break;
-      case ';': return Token(T_SEMI); break;
-      case ',': return Token(T_COMMA); break;
-      case ':': return Token(T_COLON); break;
+      case '+': type = T_PLUS; break;
+      case '-': type = T_MINUS; break;
+      case '*': type = T_STAR; break;
+      case '/': type = T_SLASH; break;
+      case '=': type = T_EQUAL; break;
+      case '(': type = T_LPAREN; break;
+      case ')': type = T_RPAREN; break;
+      case '[': type = T_LBRACKET; break;
+      case ']': type = T_RBRACKET; break;
+      case '{': type = T_LBRACE; break;
+      case '}': type = T_RBRACE; break;
+      case ';': type = T_SEMI; break;
+      case ',': type = T_COMMA; break;
+      case ':': type = T_COLON; break;
+    }
+    if (type) {
+      return Token(type, buffer.line_no, buffer.pos);
     }
 
     // couldn't match token -> error
@@ -99,12 +103,15 @@ namespace thimble {
     }
 
     // match with keywords
-    if (name == "int") return Token(T_K_INT);
-    else if (name == "void") return Token(T_K_VOID);
-    else if (name == "fn") return Token(T_K_FN);
-    else if (name == "let") return Token(T_K_LET);
+    // calculate 0-indexed line and col number for the start of the token
+    int line = buffer.line_no;
+    int col = buffer.pos - (int(name.size()) - 1);
+    if (name == "int") return Token(T_K_INT, line, col);
+    else if (name == "void") return Token(T_K_VOID, line, col);
+    else if (name == "fn") return Token(T_K_FN, line, col);
+    else if (name == "let") return Token(T_K_LET, line, col);
     // otherwise it's a generic id
-    else return Token(T_ID, name);
+    else return Token(T_ID, name, line, col);
   }
 
   // TODO: support floating point numbers
@@ -113,7 +120,9 @@ namespace thimble {
     while (isnumber(peek())) {
       str_value += get_next_char();
     }
-    return Token(T_INT, std::stoi(str_value));
+    int line = buffer.line_no;
+    int col = buffer.pos - (int(str_value.size()) - 1);
+    return Token(T_INT, std::stoi(str_value), line, col);
   }
 
   char Lexer::peek() {

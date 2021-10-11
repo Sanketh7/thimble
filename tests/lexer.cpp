@@ -3,32 +3,33 @@
 #include <vector>
 #include "../include/lexer.hpp"
 #include "../include/token.hpp"
-#include <filesystem>
 
 namespace thimble {
   TEST(LexerTest, Program1) {
     std::ifstream fin("tests/program1.txt");
 
     std::vector<Token> ans = {
-      Token(T_K_LET),
-      Token(T_ID, "a"),
-      Token(T_COLON),
-      Token(T_K_INT),
-      Token(T_SEMI),
-      Token(T_ID, "a"),
-      Token(T_EQUAL),
-      Token(T_INT, 5),
-      Token(T_SEMI)
+      Token(T_K_LET, 0, 0),
+      Token(T_ID, "a", 0, 4),
+      Token(T_COLON, 0, 5),
+      Token(T_K_INT, 0, 7),
+      Token(T_SEMI, 0, 10),
+      Token(T_ID, "a", 1, 0),
+      Token(T_EQUAL, 1, 2),
+      Token(T_INT, 5, 1, 4),
+      Token(T_SEMI, 1, 5)
     };
 
     Lexer lexer(fin);
-    Token tok;
+    Token tok = lexer.get_next_token();
     int i = 0;
-    do {
+    while (tok.type != T_EOF && i < int(ans.size())) {
+      EXPECT_EQ(tok.type, ans[i].type) << "For token number (1-indexed): " << i+1;
+      EXPECT_EQ(tok.loc.line, ans[i].loc.line) << "For token number (1-indexed): " << i+1;
+      EXPECT_EQ(tok.loc.col, ans[i].loc.col) << "For token number (1-indexed): " << i+1;
       tok = lexer.get_next_token();
-      EXPECT_EQ(tok.type, ans[i].type) << "At token index: " << i;
       ++i;
-    } while (tok.type != T_EOF);
+    } 
     EXPECT_EQ(tok.type, T_EOF);
   }
 }

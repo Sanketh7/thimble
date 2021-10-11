@@ -4,7 +4,7 @@
 
 namespace thimble {
   enum TokenType {
-    T_EOF,
+    T_EOF = 0,
 
     // value types
     T_ID,
@@ -42,16 +42,14 @@ namespace thimble {
     int int_val;
     std::string str_val;
     
+    struct {
+      int line, col;
+    } loc;
+    
     Token() {}
-    Token(TokenType type) : type(type) {}
-    Token(TokenType type, int val) : type(type), int_val(val) {}
-    Token(TokenType type, std::string& val) : type(type), str_val(val) {}
-    Token(TokenType type, const char *val) : type(type), str_val(val) {}
-
-    friend bool operator==(const Token& a, const Token& b) {
-      if (a.type == T_INT) return a.type == b.type && a.int_val == b.int_val;
-      if (a.type == T_ID) return a.type == b.type && a.str_val == b.str_val;
-      return a.type == b.type;
-    }
+    Token(TokenType type, int line, int col) : type(type), loc({line, col}) {}
+    Token(TokenType type, int val, int line, int col) : type(type), int_val(val), loc({line, col}) {}
+    Token(TokenType type, std::string& val, int line, int col) : type(type), str_val(val), loc({line, col}) {}
+    Token(TokenType type, const char *val, int line, int col) : type(type), str_val(val), loc({line, col}) {}
   };
 };
